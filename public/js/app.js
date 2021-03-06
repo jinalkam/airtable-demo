@@ -1922,14 +1922,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: [],
+  props: {
+    data: {
+      type: Array,
+      "default": []
+    }
+  },
   data: function data() {
-    return {};
+    return {
+      form: {
+        name: null,
+        email: null,
+        photo: ""
+      }
+    };
   },
   mounted: function mounted() {},
   watch: {},
-  methods: {}
+  methods: {
+    onImageChange: function onImageChange(e) {
+      console.log(e.target.files[0]);
+      this.form.photo = e.target.files[0];
+    }
+  }
 });
 
 /***/ }),
@@ -19454,238 +19506,223 @@ var render = function() {
           _vm._v("Add new team member")
         ]),
         _vm._v(" "),
-        _c("form", { staticClass: "space-y-5" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _c("div", [
-            _c(
-              "label",
-              {
-                staticClass:
-                  "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2",
-                attrs: { for: "photo" }
-              },
-              [_vm._v("\n            Photo\n          ")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "mt-1" }, [
+        _c(
+          "form",
+          {
+            staticClass: "space-y-5",
+            attrs: { enctype: "multipart/form-data" }
+          },
+          [
+            _c("div", [
               _c(
-                "div",
+                "label",
+                {
+                  staticClass: "block text-sm font-medium text-gray-700",
+                  attrs: { for: "name" }
+                },
+                [_vm._v("Name")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.name,
+                      expression: "form.name"
+                    }
+                  ],
+                  staticClass:
+                    "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md",
+                  attrs: {
+                    type: "text",
+                    name: "name",
+                    id: "name",
+                    placeholder: "Calvin Hawkins"
+                  },
+                  domProps: { value: _vm.form.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "name", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "label",
+                {
+                  staticClass: "block text-sm font-medium text-gray-700",
+                  attrs: { for: "email" }
+                },
+                [_vm._v("Email")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.email,
+                      expression: "form.email"
+                    }
+                  ],
+                  staticClass:
+                    "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md",
+                  attrs: {
+                    type: "text",
+                    name: "email",
+                    id: "email",
+                    placeholder: "you@example.com"
+                  },
+                  domProps: { value: _vm.form.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "email", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "label",
                 {
                   staticClass:
-                    "w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                    "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2",
+                  attrs: { for: "photo" }
                 },
-                [
-                  _c("div", { staticClass: "space-y-1 text-center" }, [
-                    _c(
-                      "svg",
-                      {
-                        staticClass: "mx-auto h-12 w-12 text-gray-400",
-                        attrs: {
-                          stroke: "currentColor",
-                          fill: "none",
-                          viewBox: "0 0 48 48",
-                          "aria-hidden": "true"
-                        }
-                      },
-                      [
-                        _c("path", {
+                [_vm._v("\n            Photo\n          ")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-1" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                  },
+                  [
+                    _c("div", { staticClass: "space-y-1 text-center" }, [
+                      _c(
+                        "svg",
+                        {
+                          staticClass: "mx-auto h-12 w-12 text-gray-400",
                           attrs: {
-                            d:
-                              "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
+                            stroke: "currentColor",
+                            fill: "none",
+                            viewBox: "0 0 48 48",
+                            "aria-hidden": "true"
                           }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-xs text-gray-500" }, [
-                      _vm._v(
-                        "\n                  PNG, JPG, GIF up to 10MB\n                "
-                      )
+                        },
+                        [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
+                              "stroke-width": "2",
+                              "stroke-linecap": "round",
+                              "stroke-linejoin": "round"
+                            }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "flex text-sm text-gray-600" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
+                            attrs: { for: "file-upload" }
+                          },
+                          [
+                            _c("span", [_vm._v("Upload a file")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "sr-only",
+                              attrs: {
+                                id: "file-upload",
+                                name: "file-upload",
+                                type: "file"
+                              },
+                              on: { change: _vm.onImageChange }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "pl-1" }, [
+                          _vm._v("or drag and drop")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-xs text-gray-500" }, [
+                        _vm._v("PNG, JPG, GIF up to 10MB")
+                      ])
                     ])
-                  ])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass:
-                "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-              attrs: { type: "button" }
-            },
-            [_vm._v("\n          Submit\n        ")]
-          )
-        ])
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              },
+              [_vm._v("\n          Submit\n        ")]
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _c("div", [
+        _c(
+          "ul",
+          { staticClass: "divide-y divide-gray-200" },
+          _vm._l(_vm.data, function(value, key) {
+            return _c("li", { key: key, staticClass: "py-4 flex" }, [
+              value.fields.Photo
+                ? _c("img", {
+                    staticClass: "h-10 w-10 rounded-full",
+                    attrs: { src: value.fields.Photo[0].url, alt: "" }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "ml-3" }, [
+                _c("p", { staticClass: "text-sm font-medium text-gray-900" }, [
+                  _vm._v(
+                    "\n              " +
+                      _vm._s(value.fields.Name) +
+                      "\n            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "text-sm text-gray-500" }, [
+                  _vm._v(_vm._s(value.fields.Email))
+                ])
+              ])
+            ])
+          }),
+          0
+        )
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "label",
-        {
-          staticClass: "block text-sm font-medium text-gray-700",
-          attrs: { for: "name" }
-        },
-        [_vm._v("Name")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "mt-1" }, [
-        _c("input", {
-          staticClass:
-            "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md",
-          attrs: {
-            type: "text",
-            name: "name",
-            id: "name",
-            placeholder: "Calvin Hawkins"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "label",
-        {
-          staticClass: "block text-sm font-medium text-gray-700",
-          attrs: { for: "email" }
-        },
-        [_vm._v("Email")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "mt-1" }, [
-        _c("input", {
-          staticClass:
-            "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md",
-          attrs: {
-            type: "text",
-            name: "email",
-            id: "email",
-            placeholder: "you@example.com"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex text-sm text-gray-600" }, [
-      _c(
-        "label",
-        {
-          staticClass:
-            "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
-          attrs: { for: "file-upload" }
-        },
-        [
-          _c("span", [_vm._v("Upload a file")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "sr-only",
-            attrs: { id: "file-upload", name: "file-upload", type: "file" }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c("p", { staticClass: "pl-1" }, [_vm._v("or drag and drop")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("ul", { staticClass: "divide-y divide-gray-200" }, [
-        _c("li", { staticClass: "py-4 flex" }, [
-          _c("img", {
-            staticClass: "h-10 w-10 rounded-full",
-            attrs: {
-              src:
-                "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-              alt: ""
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "ml-3" }, [
-            _c("p", { staticClass: "text-sm font-medium text-gray-900" }, [
-              _vm._v("Calvin Hawkins")
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "text-sm text-gray-500" }, [
-              _vm._v("calvin.hawkins@example.com")
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "py-4 flex" }, [
-          _c("img", {
-            staticClass: "h-10 w-10 rounded-full",
-            attrs: {
-              src:
-                "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-              alt: ""
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "ml-3" }, [
-            _c("p", { staticClass: "text-sm font-medium text-gray-900" }, [
-              _vm._v("Kristen Ramos")
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "text-sm text-gray-500" }, [
-              _vm._v("kristen.ramos@example.com")
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "py-4 flex" }, [
-          _c("img", {
-            staticClass: "h-10 w-10 rounded-full",
-            attrs: {
-              src:
-                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-              alt: ""
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "ml-3" }, [
-            _c("p", { staticClass: "text-sm font-medium text-gray-900" }, [
-              _vm._v("Ted Fox")
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "text-sm text-gray-500" }, [
-              _vm._v("ted.fox@example.com")
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

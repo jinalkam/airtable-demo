@@ -5,7 +5,7 @@
     </head>
     <body class="py-20">
         <div id="app">
-            <people-component></people-component>
+            <people-component :data="{{ $data }}"></people-component>
         </div>
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
