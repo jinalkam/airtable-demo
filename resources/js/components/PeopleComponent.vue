@@ -72,17 +72,21 @@
                   name="photo"
                   rules="mimes:image/jpeg|size:102400"
                   v-slot="{ errors, validate }"
-                   ref="provider"
+                  ref="provider"
                 >
                   <div
-                    class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                    class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md drag-area"
                     @dragover="dragover"
                     @dragleave="dragleave"
                     @drop="drop"
                   >
                     <div class="space-y-1 text-center">
                       <div class="mt-4" v-if="form.photo">
-                        <img :src="showImage" alt="" class="mx-auto h-12 w-12 text-gray-400" />
+                        <img
+                          :src="showImage"
+                          alt=""
+                          class="mx-auto h-12 w-12 text-gray-400"
+                        />
                       </div>
                       <svg
                         v-else
@@ -119,9 +123,7 @@
                         </label>
                         <p class="pl-1">or drag and drop</p>
                       </div>
-                      <p class="text-xs text-gray-500">
-                         JPG up to 100MB
-                      </p>
+                      <p class="text-xs text-gray-500">JPG up to 100MB</p>
                     </div>
                   </div>
                   <span :class="{ 'error-message': errors[0] }">{{
@@ -132,9 +134,12 @@
             </div>
             <button
               type="submit"
-              class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              :disabled="isSubmittingForm"
+              class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              :class="isSubmittingForm ? 'bg-indigo-100' : 'bg-indigo-600 hover:bg-indigo-700'"
             >
-              Submit
+              <i v-if="isSubmittingForm" class="fa fa-spinner fa-spin mr-3"></i>
+              <span>Submit</span>
             </button>
           </form>
         </ValidationObserver>
@@ -146,6 +151,12 @@
               v-if="value.fields.Photo"
               class="h-10 w-10 rounded-full"
               :src="value.fields.Photo[0].url"
+              alt=""
+            />
+            <img
+              v-else
+              class="h-10 w-10 rounded-full"
+              src="defaultUser.svg"
               alt=""
             />
             <div class="ml-3">
@@ -172,10 +183,9 @@ Object.keys(rules).forEach((rule) => {
   extend(rule, rules[rule]);
 });
 
-extend('mimes', {
-  message: 'The photo field must have a valid file type JPEG/JPG'
+extend("mimes", {
+  message: "The photo field must have a valid file type JPEG/JPG",
 });
-
 
 export default {
   components: {
@@ -191,6 +201,7 @@ export default {
   },
   data() {
     return {
+      isSubmittingForm: false,
       showImage: "",
       usersList: [],
       form: {
@@ -212,38 +223,30 @@ export default {
   },
 
   methods: {
-    onChange() {
-      this.filelist = [...this.$refs.file.files];
-    },
-    remove(i) {
-      this.filelist.splice(i, 1);
-    },
     dragover(e) {
       e.preventDefault();
       // Add some visual fluff to show the user can drop its files
-      if (!e.currentTarget.classList.contains("bg-green-300")) {
-        e.currentTarget.classList.remove("bg-gray-100");
-        e.currentTarget.classList.add("bg-green-300");
-      }
+        this.darkenBg(e.currentTarget);
+   
     },
+
     dragleave(e) {
-      // Clean up
-      e.currentTarget.classList.add("bg-gray-100");
-      e.currentTarget.classList.remove("bg-green-300");
+      e.currentTarget.classList.remove("bg-gray-100");
     },
+
     drop(e) {
       e.preventDefault();
       let file = e.dataTransfer.files[0];
-      this.previewImage(file); // Trigger the onChange event manually
-      // Clean up
-      e.currentTarget.classList.add("bg-gray-100");
-      e.currentTarget.classList.remove("bg-green-300");
+      this.previewImage(file);
     },
 
     onImageChange(e) {
-      
       let file = e.target.files[0];
       this.previewImage(file);
+    },
+
+    darkenBg(node) {
+      node.classList.add("bg-gray-100");
     },
 
     previewImage(file) {
@@ -254,9 +257,16 @@ export default {
       };
       reader.readAsDataURL(file);
       this.form.photo = file;
-      const valid =  this.$refs.provider.validate(file);
+      const valid = this.$refs.provider.validate(file);
+
+      // darken bg
+      const node = document.querySelector('.drag-area')
+      this.darkenBg(node)
     },
-    async onSubmit(e) {
+
+    async onSubmit() {
+      try {
+      this.isSubmittingForm = true;
       let formData = new FormData();
       const config = {
         headers: { "content-type": "multipart/form-data" },
@@ -264,9 +274,14 @@ export default {
       formData.append("photo", this.form.photo);
       formData.append("name", this.form.name);
       formData.append("email", this.form.email);
+
       const { data } = await window.axios.post("/api/user", formData, config);
-      if (data) {
-        this.usersList.unshift(data.user);
+      this.usersList.push(data.user);
+      
+      } catch(e) {
+        console.error(e)
+      } finally {
+        this.isSubmittingForm = false;
       }
     },
   },
