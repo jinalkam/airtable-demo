@@ -1,5 +1,10 @@
 ## Project setup
+
+clone the url and then run following commands
+
+```
 composer install
+```
 
 then run
 
@@ -7,7 +12,8 @@ then run
 npm install
 ```
 
-### Then run following command which compiles and hot-reloads for development
+### After than run command which compiles  for development
+
 ```
 npm run dev
 ```
