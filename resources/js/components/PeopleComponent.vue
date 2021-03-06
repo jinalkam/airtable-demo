@@ -69,9 +69,10 @@
               </label>
               <div class="mt-1">
                 <ValidationProvider
-                  name="file-upload"
-                  rules="required|mimes:image/jpeg,image/png"
-                  v-slot="{ errors }"
+                  name="photo"
+                  rules="mimes:image/jpeg|size:102400"
+                  v-slot="{ errors, validate }"
+                   ref="provider"
                 >
                   <div
                     class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
@@ -113,12 +114,13 @@
                             type="file"
                             class="sr-only"
                             ref="file"
+                            accept="image/jpeg"
                           />
                         </label>
                         <p class="pl-1">or drag and drop</p>
                       </div>
                       <p class="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
+                         JPG up to 100MB
                       </p>
                     </div>
                   </div>
@@ -161,12 +163,19 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { extend } from "vee-validate";
+import { extend, localize } from "vee-validate";
+import en from "vee-validate/dist/locale/en.json";
 import * as rules from "vee-validate/dist/rules";
 
+localize({ en });
 Object.keys(rules).forEach((rule) => {
   extend(rule, rules[rule]);
 });
+
+extend('mimes', {
+  message: 'The photo field must have a valid file type JPEG/JPG'
+});
+
 
 export default {
   components: {
@@ -232,6 +241,7 @@ export default {
     },
 
     onImageChange(e) {
+      
       let file = e.target.files[0];
       this.previewImage(file);
     },
@@ -244,6 +254,7 @@ export default {
       };
       reader.readAsDataURL(file);
       this.form.photo = file;
+      const valid =  this.$refs.provider.validate(file);
     },
     async onSubmit(e) {
       let formData = new FormData();
