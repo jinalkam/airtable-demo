@@ -25,11 +25,13 @@
                     type="text"
                     name="fullname"
                     id="fullname"
-                    class="form-control shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md "
+                    class="form-control shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 p-3 border rounded-md"
                     :class="{ 'error-input': errors[0] }"
                     placeholder="Calvin Hawkins"
                   />
-                  <span :class="{ 'error-message': errors[0] }">{{ errors[0] }}</span>
+                  <span :class="{ 'error-message': errors[0] }">{{
+                    errors[0]
+                  }}</span>
                 </ValidationProvider>
               </div>
             </div>
@@ -52,7 +54,9 @@
                     :class="{ 'error-input': errors[0] }"
                     placeholder="you@example.com"
                   />
-                             <span :class="{ 'error-message': errors[0] }">{{ errors[0] }}</span>
+                  <span :class="{ 'error-message': errors[0] }">{{
+                    errors[0]
+                  }}</span>
                 </ValidationProvider>
               </div>
             </div>
@@ -64,54 +68,64 @@
                 Photo
               </label>
               <div class="mt-1">
-                      <ValidationProvider
+                <ValidationProvider
                   name="file-upload"
                   rules="required|mimes:image/jpeg,image/png"
                   v-slot="{ errors }"
                 >
-                <div
-                  class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
-                >
-                  <div class="space-y-1 text-center">
-                    <svg
-                      class="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    <div class="flex text-sm text-gray-600">
-                      <label
-                        for="file-upload"
-                        class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  <div
+                    class="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                    @dragover="dragover"
+                    @dragleave="dragleave"
+                    @drop="drop"
+                  >
+                    <div class="space-y-1 text-center">
+                      <div class="mt-4" v-if="form.photo">
+                        <img :src="showImage" alt="" class="mx-auto h-12 w-12 text-gray-400" />
+                      </div>
+                      <svg
+                        v-else
+                        class="mx-auto h-12 w-12 text-gray-400"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
                       >
-                        <span>Upload a file</span>
-                    
-                        <input
-                          v-on:change="onImageChange"
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          class="sr-only"
-                        />  
-                          
-                      </label>
-                      <p class="pl-1">or drag and drop</p>
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+
+                      <div class="flex text-sm text-gray-600">
+                        <label
+                          for="file-upload"
+                          class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        >
+                          <span>Upload a file</span>
+
+                          <input
+                            v-on:change="onImageChange"
+                            id="file-upload"
+                            name="file-upload"
+                            type="file"
+                            class="sr-only"
+                            ref="file"
+                          />
+                        </label>
+                        <p class="pl-1">or drag and drop</p>
+                      </div>
+                      <p class="text-xs text-gray-500">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
                     </div>
-                    <p class="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
                   </div>
-                </div>
-               <span :class="{ 'error-message': errors[0] }" >{{ errors[0] }}</span>
-                 </ValidationProvider>
+                  <span :class="{ 'error-message': errors[0] }">{{
+                    errors[0]
+                  }}</span>
+                </ValidationProvider>
               </div>
             </div>
             <button
@@ -168,6 +182,7 @@ export default {
   },
   data() {
     return {
+      showImage: "",
       usersList: [],
       form: {
         name: null,
@@ -188,8 +203,47 @@ export default {
   },
 
   methods: {
+    onChange() {
+      this.filelist = [...this.$refs.file.files];
+    },
+    remove(i) {
+      this.filelist.splice(i, 1);
+    },
+    dragover(e) {
+      e.preventDefault();
+      // Add some visual fluff to show the user can drop its files
+      if (!e.currentTarget.classList.contains("bg-green-300")) {
+        e.currentTarget.classList.remove("bg-gray-100");
+        e.currentTarget.classList.add("bg-green-300");
+      }
+    },
+    dragleave(e) {
+      // Clean up
+      e.currentTarget.classList.add("bg-gray-100");
+      e.currentTarget.classList.remove("bg-green-300");
+    },
+    drop(e) {
+      e.preventDefault();
+      let file = e.dataTransfer.files[0];
+      this.previewImage(file); // Trigger the onChange event manually
+      // Clean up
+      e.currentTarget.classList.add("bg-gray-100");
+      e.currentTarget.classList.remove("bg-green-300");
+    },
+
     onImageChange(e) {
-      this.form.photo = e.target.files[0];
+      let file = e.target.files[0];
+      this.previewImage(file);
+    },
+
+    previewImage(file) {
+      let reader = new FileReader();
+      reader.onload = (f) => {
+        // f.target.result contains the base64 encoding of the image
+        this.showImage = f.target.result;
+      };
+      reader.readAsDataURL(file);
+      this.form.photo = file;
     },
     async onSubmit(e) {
       let formData = new FormData();
@@ -214,7 +268,7 @@ export default {
 }
 span.error-message {
   width: 100%;
-  margin-top: .25rem;
+  margin-top: 0.25rem;
   font-size: 80%;
   color: #dc3545;
 }
