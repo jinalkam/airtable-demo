@@ -10,38 +10,32 @@ class PeopleController extends Controller
 
 	public function index()
 	{ 
-		$data = \Cache::remember('users', 30, function () {
-			return Airtable::table('default')->all();
+		// No need to call Airtable API everytime someone req page
+		// We are clearing cache when someone adds data
+		$data = \Cache::rememberForever('users', function () {
+			return Airtable::table('default')->all(500000);
 		});
 		return view('people', ['users' => $data]);
 	}
 
 
-
 	public function store(Request $request)
 	{ 
 
-		$validator = Validator::make($request->all(), [
-			'name' => 'required',
-			'email' => 'required|email',
-		]);
-
-		if ($validator->fails()) {
-			return response()->json(['error' => $validator->errors()], 401);
-		}
-
 		$getResult = Airtable::table('default')->create([
-		'Name' => $request->name,
-		'Email' => $request->email,
+			'Name' => $request->name,
+			'Email' => $request->email,
 		]);
-
+         
 		if($request->file('photo')) {
+			// upload file to cloudinary server
 			 $file_url = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
-			 $getResult = Airtable::table('default')->patch($getResults['id'], ['Photo' => [['url' => $file_url]] ]);
+			 $getResult = Airtable::table('default')->patch($getResult['id'], ['Photo' => [['url' => $file_url]] ]);
 			 
 		}
+		// Refresh Cache only if someone adds new data otherwise serve from cache
+		\Cache::forget('users');
         return response()->json([
-			'message' => 'User added successfully',
 			'user' => $getResult
 		   ]);
 	}
